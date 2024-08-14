@@ -23,8 +23,7 @@ class compiler {
                 boolean validInput = false;
 
                 for(int i = 1; i <= data.length(); i++) {
-                    // System.out.println(data.charAt(i));
-                    if (Character.isWhitespace(data.charAt(i - 1))) {
+                    if (Character.isWhitespace(data.charAt(min))) {
                         // ignoring whitespace
                         if (!inputFound) { min += 1; }
                         else {
@@ -32,31 +31,30 @@ class compiler {
                             System.out.println("pattern no longer matches (whitespace) -- substring: " + substring);
                             identifyToken(substring);
                             min += substring.length() + 1;
+                            i = min + 1;
                             inputFound = false;
                             validInput = false;
                         }
                     } else {
                         inputFound = true;
                         substring = data.substring(min, i);
-                        // System.out.println("min, i: " + min + ", " + Integer.toString(i));
-                        System.out.println(substring);
+
                         // when tokens are side by side
                         // i.e. int main(var1..
                         //              ^
                         if (identifyToken(substring) == 0 && validInput) {
                             substring = data.substring(min, i - 1);
                             System.out.println("pattern no longer matches -- substring: " + substring);
-                            // System.out.println("min, i - 1: " + min + ", " + Integer.toString(i - 1));
                             identifyToken(substring);
                             min += substring.length();
-                            i -=  1;
+                            i = min; // this is really min + 1 because the loop will increase it
                             inputFound = false;
                             validInput = false;
                         } else if (identifyToken(substring) == 2) {
                             System.out.println("reserved word/symbol -- substring: " + substring);
                             identifyToken(substring);
                             min += substring.length();
-                            i -= 1;
+                            i = min; // this is really min + 1 because the loop will increase it
                             inputFound = false;
                             validInput = false;
                         } else if (!validInput) {
@@ -110,6 +108,7 @@ class compiler {
                 return 2;
             }
             case String s when isMatching(s, "[a-zA-Z_]\\w*\\b") -> {
+                // System.out.println("Identifier");
                 return 1;
             }
             default -> {
