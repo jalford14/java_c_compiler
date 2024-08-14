@@ -24,12 +24,12 @@ class compiler {
 
                 for(int i = 1; i <= data.length(); i++) {
                     // System.out.println(data.charAt(i));
-                    if (Character.isWhitespace(data.charAt(i))) {
+                    if (Character.isWhitespace(data.charAt(i - 1))) {
                         // ignoring whitespace
                         if (!inputFound) { min += 1; }
                         else {
                             substring = data.substring(min, i);
-                            System.out.println("patter no longer matches (whitespace) -- substring: " + substring);
+                            System.out.println("pattern no longer matches (whitespace) -- substring: " + substring);
                             identifyToken(substring);
                             min += substring.length() + 1;
                             inputFound = false;
