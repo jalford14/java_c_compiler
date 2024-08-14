@@ -20,31 +20,47 @@ class compiler {
                 String substring = "";
                 int min = 0;
                 boolean inputFound = false;
+                boolean validInput = false;
 
-                for(int i = 0; i < data.length(); i++) {
-                    System.out.println(data.charAt(i));
+                for(int i = 1; i <= data.length(); i++) {
+                    // System.out.println(data.charAt(i));
                     if (Character.isWhitespace(data.charAt(i))) {
                         // ignoring whitespace
                         if (!inputFound) { min += 1; }
                         else {
-                            substring = data.substring(min, i - 1);
-                            System.out.println(substring);
+                            substring = data.substring(min, i);
+                            System.out.println("patter no longer matches (whitespace) -- substring: " + substring);
                             identifyToken(substring);
                             min += substring.length() + 1;
                             inputFound = false;
+                            validInput = false;
                         }
                     } else {
                         inputFound = true;
                         substring = data.substring(min, i);
+                        // System.out.println("min, i: " + min + ", " + Integer.toString(i));
+                        System.out.println(substring);
                         // when tokens are side by side
                         // i.e. int main(var1..
                         //              ^
-                        if (identifyToken(substring) == 0) {
+                        if (identifyToken(substring) == 0 && validInput) {
                             substring = data.substring(min, i - 1);
-                            System.out.println(substring);
+                            System.out.println("pattern no longer matches -- substring: " + substring);
+                            // System.out.println("min, i - 1: " + min + ", " + Integer.toString(i - 1));
                             identifyToken(substring);
-                            min += substring.length() + 1;
+                            min += substring.length();
+                            i -=  1;
                             inputFound = false;
+                            validInput = false;
+                        } else if (identifyToken(substring) == 2) {
+                            System.out.println("reserved word/symbol -- substring: " + substring);
+                            identifyToken(substring);
+                            min += substring.length();
+                            i -= 1;
+                            inputFound = false;
+                            validInput = false;
+                        } else if (!validInput) {
+                            validInput = true;
                         }
                     }
                 }
@@ -57,27 +73,47 @@ class compiler {
     }
 
     private static int identifyToken(String input) {
+        // System.out.println("identifyToken -- " + input);
         switch(input) {
-            case String s when isMatching(s, "[a-zA-Z_]\\w*\\b") ->
-                System.out.println("Identifier");
             case String s when isMatching(s, "[0-9]+\\b") ->
-                System.out.println("Constant");
-            case String s when isMatching(s, "int\\b") ->
-                System.out.println("int");
-            case String s when isMatching(s, "return\\b") ->
-                System.out.println("void");
-            case String s when isMatching(s, "\\(") ->
-                System.out.println("return");
-            case String s when isMatching(s, "\\)") ->
-                System.out.println("open parens");
-            case String s when isMatching(s, "\\{") ->
-                System.out.println("close parens");
-            case String s when isMatching(s, "\\}") ->
-                System.out.println("open brace");
-            case String s when isMatching(s, ";") ->
-                System.out.println("closed brace");
+                System.out.println("identifyToken -- Constant");
+            case String s when isMatching(s, "int\\b") -> {
+                System.out.println("identifyToken -- int");
+                return 2;
+            }
+            case String s when isMatching(s, "return\\b") -> {
+                System.out.println("identifyToken -- return");
+                return 2;
+            }
+            case String s when isMatching(s, "void\\b") -> {
+                System.out.println("identifyToken -- void");
+                return 2;
+            }
+            case String s when isMatching(s, "\\(") -> {
+                System.out.println("identifyToken -- open parens");
+                return 2;
+            }
+            case String s when isMatching(s, "\\)") -> {
+                System.out.println("identifyToken -- close parens");
+                return 2;
+            }
+            case String s when isMatching(s, "\\{") -> {
+                System.out.println("identifyToken -- open brace");
+                return 2;
+            }
+            case String s when isMatching(s, "\\}") -> {
+                System.out.println("identifyToken -- close brace");
+                return 2;
+            }
+            case String s when isMatching(s, ";") -> {
+                System.out.println("identifyToken -- semicolon");
+                return 2;
+            }
+            case String s when isMatching(s, "[a-zA-Z_]\\w*\\b") -> {
+                return 1;
+            }
             default -> {
-                System.out.println("Can't identify");
+                // System.out.println("Can't identify");
                 return 0;
             }
         }
@@ -91,6 +127,7 @@ class compiler {
     }
 
     private static boolean isMatching(String input, String regex) {
+        // System.out.println("input: " + input);
         return Pattern.matches(regex, input);
     }
 }
