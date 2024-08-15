@@ -4,7 +4,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-class compiler {
+class lexer {
     public static void main(String []args) {
         if (args.length == 0) {
             System.err.println("Error: no input file");
