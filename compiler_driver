@@ -1,4 +1,4 @@
-# bin/bash
+#!/bin/sh
 
 # Preprocess the source file
 gcc -E -P $1 -o preprocessed_file.i
