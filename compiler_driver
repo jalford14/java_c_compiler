@@ -1,0 +1,53 @@
+# bin/bash
+
+# Preprocess the source file
+gcc -E -P $1 -o preprocessed_file.i
+
+# Compile the preprocessed file and output an assembly file
+# This process is stubbed for now since we don't have a compiler
+# quite yet
+while [[ $# -gt 0 ]]; do
+    case "$2" in
+        --lex)
+            javac lexer.java
+            java lexer $1
+            rm preprocessed_file.i
+            exit 0
+            ;;
+        --parse)
+            echo "This option is not yet implemented"
+            rm preprocessed_file.i
+            exit 0
+            ;;
+        --codegen)
+            echo "This option is not yet implemented"
+            rm preprocessed_file.i
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1"
+            exit 0
+            ;;
+    esac
+done
+
+# NOTE: 
+# You might also want to add a -S option that directs your compiler to emit
+# an assembly file, but not assemble or link it. You’ll need this option to run
+# the tests in Part III; it isn’t required for Parts I and II, but it’s useful
+# for debugging
+
+touch assembly.s
+rm preprocessed_file.i
+
+# Assemble and link the assembly file to produce an executable
+dir=$(dirname "$1")
+filename=$(basename "$1" .c)
+
+# Define the path for the new executable
+new_executable="$dir/$filename"
+
+gcc assembly.s -o "$new_executable"
+chmod +x "$new_executable"
+rm assembly.s
+exit 0
