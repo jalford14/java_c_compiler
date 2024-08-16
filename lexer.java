@@ -49,6 +49,9 @@ class lexer {
                             i = min; // this is really min + 1 because the loop will increase it
                             inputFound = false;
                             validInput = false;
+                        } else if (tokenResult == 0 && !validInput) {
+                            throw new RuntimeException("Error: Character not recognized: " +
+                                    substring);
                         } else if (tokenResult == 2) {
                             min += substring.length();
                             i = min; // this is really min + 1 because the loop will increase it
@@ -72,16 +75,8 @@ class lexer {
             case String s when isMatching(s, "[0-9]+\\b") -> {
                 return 1;
             }
-            case String s when isMatching(s, "int\\b") -> {
-                System.out.println("int");
-                return 2;
-            }
-            case String s when isMatching(s, "return\\b") -> {
-                System.out.println("return");
-                return 2;
-            }
-            case String s when isMatching(s, "void\\b") -> {
-                System.out.println("void");
+            case String s when isMatching(s, "(int\\b|return\\b|void\\b)") -> {
+                System.out.println(s);
                 return 2;
             }
             case String s when isMatching(s, "\\(") -> {
