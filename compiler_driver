@@ -6,27 +6,27 @@ gcc -E -P $1 -o preprocessed_file.i
 # Compile the preprocessed file and output an assembly file
 # This process is stubbed for now since we don't have a compiler
 # quite yet
-while [[ $# -gt 0 ]]; do
-    case "$2" in
+while [[ "$1" == --* ]]; do
+    case "$1" in
         --lex)
+            rm preprocessed_file.i
             javac lexer.java
             java lexer $1
-            rm preprocessed_file.i
-            exit 0
+            exit $?
             ;;
         --parse)
             echo "This option is not yet implemented"
             rm preprocessed_file.i
-            exit 0
+            exit 1
             ;;
         --codegen)
             echo "This option is not yet implemented"
             rm preprocessed_file.i
-            exit 0
+            exit 1
             ;;
         *)
             echo "Unknown option: $1"
-            exit 0
+            exit 1
             ;;
     esac
 done
