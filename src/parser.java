@@ -29,6 +29,9 @@ class Program {
 }
 
 class Parser {
+    public static pp(List<String> tokens) {
+    }
+
     static String parse_statement(List<String> tokens) {
         expect("return", tokens);
         return_val = parse_exp(tokens);
