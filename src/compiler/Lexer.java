@@ -1,10 +1,12 @@
+package compiler.lexer;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-class lexer {
+class Lexer {
     public static void main(String []args) {
         if (args.length == 0) {
             System.err.println("Error: no input file");
