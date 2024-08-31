@@ -1,4 +1,4 @@
-package compiler.lexer;
+package compiler;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -6,14 +6,8 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-class Lexer {
-    public static void main(String []args) {
-        if (args.length == 0) {
-            System.err.println("Error: no input file");
-            return;
-        }
-
-        String filename = args[0];
+public class Lexer {
+    public static void run(String filename) {
         try {
             File file = new File(filename);
             Scanner scanner = new Scanner(file);

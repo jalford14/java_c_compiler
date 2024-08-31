@@ -1,4 +1,4 @@
-package compiler.parser;
+package compiler;
 
 abstract class Exp {
     Exp(int value) { this.value = value; }
@@ -30,7 +30,7 @@ class Program {
     }
 }
 
-class Parser {
+public class Parser {
     public static pp(List<String> tokens) {
     }
 
