@@ -5,9 +5,13 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
+import java.util.List;
+import java.util.ArrayList;
 
 public class Lexer {
-    public static void run(String filename) {
+    public static List<String> run(String filename) {
+        List<String> tokens = new ArrayList<String>();
+        
         try {
             File file = new File(filename);
             Scanner scanner = new Scanner(file);
@@ -24,7 +28,9 @@ public class Lexer {
                         if (!inputFound) { min += 1; }
                         else {
                             substring = data.substring(min, i);
-                            identifyToken(substring);
+                            if (identifyToken(substring) != 0) {
+                                tokens.add(substring);
+                            }
                             min += substring.length() + 1;
                             i = min + 1;
                             inputFound = false;
@@ -40,7 +46,7 @@ public class Lexer {
                         //              ^
                         if (tokenResult == 0 && validInput) {
                             substring = data.substring(min, i - 1);
-                            System.out.println(substring);
+                            tokens.add(substring);
                             min += substring.length();
                             i = min; // this is really min + 1 because the loop will increase it
                             inputFound = false;
@@ -61,9 +67,8 @@ public class Lexer {
             }
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Error: File '${filename}' does not exist");
-            e.printStackTrace();
         }
+        return tokens;
     }
 
     private static int identifyToken(String input) {
@@ -72,27 +77,21 @@ public class Lexer {
                 return 1;
             }
             case String s when isMatching(s, "(int\\b|return\\b|void\\b)") -> {
-                System.out.println(s);
                 return 2;
             }
             case String s when isMatching(s, "\\(") -> {
-                System.out.println("(");
                 return 2;
             }
             case String s when isMatching(s, "\\)") -> {
-                System.out.println(")");
                 return 2;
             }
             case String s when isMatching(s, "\\{") -> {
-                System.out.println("{");
                 return 2;
             }
             case String s when isMatching(s, "\\}") -> {
-                System.out.println("}");
                 return 2;
             }
             case String s when isMatching(s, ";") -> {
-                System.out.println(";");
                 return 2;
             }
             case String s when isMatching(s, "[a-zA-Z_]\\w*\\b") -> {

@@ -1,4 +1,5 @@
 import compiler.Lexer;
+import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
@@ -7,6 +8,7 @@ public class Main {
             return;
         }
 
-        Lexer.run(args[0]);
+        List<String> tokens = Lexer.run(args[0]);
+        System.out.println(tokens);
     }
 }
