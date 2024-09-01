@@ -56,6 +56,7 @@ public class Lexer {
                                     substring);
                         } else if (tokenResult == 2) {
                             min += substring.length();
+                            tokens.add(substring);
                             i = min; // this is really min + 1 because the loop will increase it
                             inputFound = false;
                             validInput = false;
@@ -67,6 +68,7 @@ public class Lexer {
             }
             scanner.close();
         } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
         return tokens;
     }
